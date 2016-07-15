@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "#Lahman Database preparation\nlibrary(Lahman)\nlibrary(dplyr)\n#-Merge listings of players on multiple teams within the same year-\nBatting %>% group_by(playerID,yearID) %>% \nsummarise(teamID=first(teamID),lgID=first(lgID),G=sum(G),AB=sum(AB),H=sum(H),R=sum(R),RBI=sum(RBI),SB=sum(SB),CS=sum(CS),X2B=sum(X2B),X3B=sum(X3B),HR=sum(HR),BB=sum(BB),IBB=sum(IBB),SH=sum(SH),SF=sum(SF),HBP=sum(HBP),GIDP=sum(GIDP))->bat\n#-Set NA's to zero-\nbat[is.na(bat)]<-0\n#-Add a singles column-\nbat %>% mutate(X1B=H-X2B-X3B-HR)->bat\n#-Prepare the fielding df for merge-\nFielding %>% group_by(playerID,yearID) %>% summarise(E=sum(E),POS=first(POS))->field\nfield[is.na(field)]<-0\n#-merge bat and field, the new df has errors and position-\nright_join(bat,field)->bat\n#-Add NL fantasy points-\nbat %>% mutate(points=X1B+R+RBI+BB+SB+(2*X2B)+(4*X3B)+(4*X3B)+(4*HR)-E)->bat\n",
+    "created" : 1468257949742.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "4260825289",
+    "id" : "3F57BE39",
+    "lastKnownWriteTime" : 1468268166,
+    "last_content_update" : 1468268166113,
+    "path" : "C://quantmod/NL_Fantasy.R",
+    "project_path" : "NL_Fantasy.R",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

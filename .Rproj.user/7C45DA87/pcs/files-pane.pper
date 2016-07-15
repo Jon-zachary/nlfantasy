@@ -1,0 +1,9 @@
+{
+    "path" : "C://quantmod",
+    "sortOrder" : [
+        {
+            "ascending" : true,
+            "columnIndex" : 2
+        }
+    ]
+}
