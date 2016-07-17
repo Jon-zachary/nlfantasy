@@ -1,6 +1,7 @@
 #Lahman Database preparation
 library(Lahman)
 library(dplyr)
+library(lubridate)
 #-Merge listings of players on multiple teams within the same year-
 Batting %>% group_by(playerID,yearID) %>% 
 summarise(teamID=first(teamID),lgID=first(lgID),G=sum(G),AB=sum(AB),H=sum(H),R=sum(R),RBI=sum(RBI),SB=sum(SB),CS=sum(CS),X2B=sum(X2B),X3B=sum(X3B),HR=sum(HR),BB=sum(BB),IBB=sum(IBB),SH=sum(SH),SF=sum(SF),HBP=sum(HBP),GIDP=sum(GIDP))->bat
@@ -25,5 +26,8 @@ mast$birthDate<-as.Date(mast$birthDate)
 mast<-na.omit(mast)
 #-merge master and batters-
 merge(bat,mast)->bat
+#-calculate ages
+bat %>% mutate(bbAge=date(paste(yearID,"-06-01",sep="")))->bat
+bat$Age<-as.period(interval(start=bat$birthDate,end=bat$bbAge))$year
 
 
